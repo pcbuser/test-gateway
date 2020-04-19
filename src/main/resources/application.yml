@@ -1,0 +1,58 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: Accept
+          uri: http://localhost:8081
+          predicates:
+            - Path=/acceptProcessings/**
+        - id: Repair
+          uri: http://localhost:8082
+          predicates:
+            - Path=/repairProcessings/** 
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: Accept
+          uri: http://Accept:8080
+          predicates:
+            - Path=/acceptProcessings/**
+        - id: Repair
+          uri: http://Repair:8080
+          predicates:
+            - Path=/repairProcessings/** 
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
